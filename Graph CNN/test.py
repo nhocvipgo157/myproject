@@ -1,14 +1,25 @@
-import numpy as np
-import cv2 as cv
-import glob
-import networkx as nx
 import matplotlib.pyplot as plt
-import scipy
-from scipy.spatial import distance
+import pandas as pd
+import numpy as np
+import torch
 
-img =cv.imread("D:\Hoc_ky_212_2022\De_cuong_luan_van_tot_nghiep\gg (9).jpg",cv.IMREAD_GRAYSCALE)
-cat,thresh1 = cv.threshold(img,127,255,cv.THRESH_BINARY)
-#image = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,cv.THRESH_BINARY,11,2)
-#image = cv.resize(img_1, (50,50))
-cv.imshow("cat",thresh1)
-cv.waitKey()
+
+
+MUT_LABEL_ENC = pd.Series(data = ["C","O", "Cl","H","N","F","Br","S","P","I","Na","K","Li","Ca"])
+print("Number of different elements: ", len(MUT_LABEL_ENC))
+
+from torch_geometric.datasets import TUDataset
+
+# Load the dataset
+dataset = TUDataset(
+    root=".", name="Mutagenicity",
+    transform=None,
+).shuffle()
+
+print(f'Dataset: {dataset}:')
+print('====================')
+print(f'Number of graphs: {len(dataset)}')
+print(f'Number of features: {dataset.num_features}')
+print(f'Number of classes: {dataset.num_classes}')
+print(f'Samples per class: {[ np.sum([1 for graph in dataset if graph.y == i ]) for i in range(dataset.num_classes) ]}')
+

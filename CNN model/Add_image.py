@@ -6,20 +6,18 @@ import random
 
 img_size = 244
 datadir = ("Training")
-categories = ["Cat","Dog","Panda","Unknow"]
+categories = ["Cat","Dog","Panda"]
 training_data = []
 
 def create_training_data():
     for category in categories:
         path = os.path.join(datadir,category)
         class_num = categories.index(category)
-        for img in os.listdir(path):
-            try:
+        for img in os.listdir(path):        
                 img_array = cv.imread(os.path.join(path,img),cv.IMREAD_GRAYSCALE)
                 new_array = cv.resize(img_array,(img_size,img_size))
                 training_data.append([new_array,class_num])
-            except Exception as e:
-                pass
+    
 
 create_training_data()
 random.shuffle(training_data)
@@ -40,3 +38,4 @@ pickle_out.close()
 pickle_out = open("y.pickle","wb")
 pickle.dump(y,pickle_out)
 pickle_out.close()
+
